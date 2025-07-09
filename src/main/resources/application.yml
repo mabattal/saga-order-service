@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sagaOrderDb
+    username: postgres
+    password: 1
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+kafka:
+  address: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
+  group-id: order-service-group
+  topic:
+    orderCreated: order-created
+    paymentCompleted: payment-completed
+    paymentFailed: payment-failed
+    inventoryReserved: inventory-reserved
+    inventoryFailed: inventory-failed
+    paymentRequested: payment-requested
