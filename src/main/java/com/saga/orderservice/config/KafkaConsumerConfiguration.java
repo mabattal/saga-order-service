@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
@@ -33,6 +34,13 @@ public class KafkaConsumerConfiguration {
         config.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaProperties.getGroupId());
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+
+        // consumer.properties içindekileri config’e ekle
+        if (kafkaProperties.getConsumer() != null &&
+                kafkaProperties.getConsumer().getProperties() != null) {
+            config.putAll(kafkaProperties.getConsumer().getProperties());
+        }
+
         return new DefaultKafkaConsumerFactory<>(
                 config,
                 new StringDeserializer(),
@@ -43,6 +51,17 @@ public class KafkaConsumerConfiguration {
     private <T> ConcurrentKafkaListenerContainerFactory<String, T> createFactory(Class<T> targetType) {
         ConcurrentKafkaListenerContainerFactory<String, T> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(createConsumerFactory(targetType));
+
+        // acknowledgment mode varsa ayarla
+        if (kafkaProperties.getListener() != null &&
+                kafkaProperties.getListener().getAckMode() != null) {
+            factory.getContainerProperties().setAckMode(
+                    ContainerProperties.AckMode.valueOf(
+                            kafkaProperties.getListener().getAckMode().toUpperCase()
+                    )
+            );
+        }
+
         return factory;
     }
 

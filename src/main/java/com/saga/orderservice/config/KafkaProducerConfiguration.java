@@ -1,6 +1,5 @@
 package com.saga.orderservice.config;
 
-import com.saga.orderservice.event.OrderCreatedEvent;
 import com.saga.orderservice.property.KafkaProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
