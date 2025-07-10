@@ -73,7 +73,6 @@ spring:
 - ⬅️ payment-completed veya payment-failed
 - ➡️ order-created ➝ inventory-service
 - ⬅️ inventory-reserved veya inventory-failed
-- ➡️ refund-payment ➝ payment-service
 
 ## 🛠️ Kullanılan Teknolojiler
 
